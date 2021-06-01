@@ -22,7 +22,7 @@ class Cell {
         }
         if (this.tile != " " && this.tile != "") {
             imageMode(CENTER);
-            image(this.tile, this.x * cellSize, this.y * cellSize - 40, 382/5, 805/5);
+            image(this.tile, this.x * cellSize, this.y * cellSize - 75, 382/3, 805/3);
         }
     }
 

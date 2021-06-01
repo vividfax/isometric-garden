@@ -6,7 +6,7 @@ let colors = {
 let cells;
 let player;
 
-let cellSize = 20;
+let cellSize = 30;
 
 function setup() {
 
