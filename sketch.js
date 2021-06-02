@@ -47,6 +47,7 @@ function draw() {
         }
     }
     push();
+
     translate(width - floor(windowWidth / cellSize - 1) * cellSize, height - floor(windowHeight / cellSize - 1) * cellSize);
 
     for (let j = 0; j < cells[0].length; j++) {
@@ -54,7 +55,6 @@ function draw() {
             cells[i][j].display();
         }
     }
-    plant(player.x, player.y);
     pop();
 
     noStroke();
@@ -64,6 +64,7 @@ function draw() {
 
 function keyPressed() {
 
+    plant(player.x, player.y);
     player.move(keyCode);
 }
 
@@ -122,6 +123,7 @@ function live() {
 function plant(x, y) {
 
     cells[x][y].state = true;
+    cells[x][y].assignType();
     cells[x][y].update();
 }
 

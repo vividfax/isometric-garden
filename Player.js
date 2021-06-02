@@ -9,7 +9,7 @@ class Player {
     display() {
 
         imageMode(CENTER);
-        image(person6, this.x * cellSize, this.y * cellSize - 75, 382/3, 805/3);
+        image(person6, this.x * cellSize, this.y * cellSize - 65, 382/3, 805/3);
     }
 
     move(key) {

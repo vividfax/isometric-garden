@@ -15,29 +15,28 @@ class Cell {
 
     display() {
 
+        if (this.tile != " " && this.tile != "") {
+            imageMode(CENTER);
+            image(this.tile, this.x * cellSize, this.y * cellSize - 75, 382/3, 805/3);
+        }
         if (this.x == player.x && this.y == player.y) {
 
             player.display();
             return;
         }
-        if (this.tile != " " && this.tile != "") {
-            imageMode(CENTER);
-            image(this.tile, this.x * cellSize, this.y * cellSize - 75, 382/3, 805/3);
-        }
+
     }
 
     update() {
 
-        let tileset = [agave1, bamboo1, bush3, bush4, cactus1, dandelion1, flower1, flower3, fruit_tree1, fungus1, palm2, pumpkin1, reed2, reeds1, rose1, tomato1, tree2, tree3, tropical1, tropical2, tropical3];
-
-        if (!this.cache && this.state) {
-            this.tile = random(tileset);
+        if (!this.cache && this.state && (this.tile == "" || this.tile == " ")) {
+            this.tile = this.assignType();
 
         } else if (!this.state) {
             this.tile = " ";
 
         } else if (this.tile == "") {
-            this.tile = random(tileset);
+            this.tile = this.assignType();
         }
         if (player.x == this.x && player.y == this.y) {
             return;
@@ -47,8 +46,12 @@ class Cell {
         } else {
             this.age = 0;
         }
-        if (this.age == 6 && random() > 0.7) {
-            this.tile = random(tileset);
-        }
+    }
+
+    assignType() {
+
+        let tileset = [agave1, bamboo1, bush3, bush4, cactus1, dandelion1, flower1, flower3, fruit_tree1, fungus1, palm2, pumpkin1, reed2, rose1, tomato1, tree2, tree3, tropical1, tropical2, tropical3];
+
+        return random(tileset);
     }
 }
