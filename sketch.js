@@ -1,6 +1,6 @@
 let colors = {
-    dark: "#B0C3A4",
-    mid: "#D4DFCD",
+    dark: "#CAAED3",
+    mid: "#D8CDDF",
     light: "#ffffff",
 }
 let cells;
@@ -58,8 +58,10 @@ function draw() {
     pop();
 
     noStroke();
-    fill(153, 177, 138, 120);
+    fill(186, 149, 192, 120);
     rect(0, 0, width, height);
+
+    filter(POSTERIZE, 40);
 }
 
 function keyPressed() {
