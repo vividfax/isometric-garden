@@ -14,17 +14,23 @@ function setup() {
 
     createBackground();
 
-    cells = [...Array(floor(windowWidth / cellSize - 1))].map(e => Array(floor(windowHeight / cellSize - 1)));
+    let cols = floor(windowWidth / cellSize - 1);
+    let rows = floor(windowHeight / cellSize - 1);
+
+    if (cols % 2 == 1) {
+        cols += 1;
+    }
+    cells = [...Array(cols)].map(e => Array(rows));
 
     for (let i = 0; i < cells.length; i++) {
         for (let j = 0; j < cells[i].length; j++) {
 
-            cells[i][j] = new Cell(i, j, "🤍");
+            cells[i][j] = new Cell(i, j, "");
 
             let noiseScale = 0.1;
             let perlin = noise(i * noiseScale, j * noiseScale);
 
-            if (perlin > 0.6) {
+            if (perlin > 0.65) {
                 cells[i][j].state = true;
             } else {
                 cells[i][j].state = false;
@@ -38,7 +44,8 @@ function draw() {
 
     updatePixels();
 
-    if (frameCount % (24 * 2) == 1) {
+    if (frameCount % (24 * 1) == 1) {
+        mirror();
         live();
         for (let i = 0; i < cells.length; i++) {
             for (let j = 0; j < cells[i].length; j++) {
@@ -48,7 +55,7 @@ function draw() {
     }
     push();
 
-    translate(width - floor(windowWidth / cellSize - 1) * cellSize, height - floor(windowHeight / cellSize - 1) * cellSize);
+    translate(width - cells.length * cellSize, height - cells[0].length * cellSize);
 
     for (let j = 0; j < cells[0].length; j++) {
         for (let i = 0; i < cells.length; i++) {
@@ -117,6 +124,26 @@ function live() {
 
             } else {
                 cells[i][j].state = cells[i][j].cache;
+            }
+        }
+    }
+}
+
+function mirror() {
+
+    for (let i = 0; i < cells.length / 2; i++) {
+        for (let j = 0; j < cells[i].length; j++) {
+
+            if (cells[i][j].state) {
+                cells[cells.length - 1 - i][j].state = true;
+            }
+        }
+    }
+    for (let i = 0; i < cells.length / 2; i++) {
+        for (let j = 0; j < cells[i].length; j++) {
+
+            if (cells[cells.length - 1 - i][j].state) {
+                cells[i][j].state = true;
             }
         }
     }
