@@ -23,7 +23,7 @@ class Cell {
 
             player.display();
         }
-        animalCount = countPlants() / 20;
+        animalCount = floor(countPlants() / 20 - 1);
 
         if (animalCount > animals.length) {
             animalCount = animals.length;

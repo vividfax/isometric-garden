@@ -31,15 +31,7 @@ function setup() {
         for (let j = 0; j < cells[i].length; j++) {
 
             cells[i][j] = new Cell(i, j, "");
-
-            let noiseScale = 0.1;
-            let perlin = noise(i * noiseScale, j * noiseScale);
-
-            if (perlin > 0.65) {
-                cells[i][j].state = true;
-            } else {
-                cells[i][j].state = false;
-            }
+            cells[i][j].state = false;
         }
     }
     player = new Player(int(cells.length / 2), int(cells[0].length / 2));
