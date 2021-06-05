@@ -5,6 +5,7 @@ let colors = {
 }
 let cells;
 let player;
+let animals = [];
 
 let cellSize = 30;
 
@@ -38,6 +39,11 @@ function setup() {
         }
     }
     player = new Player(int(cells.length / 2), int(cells[0].length / 2));
+
+    for (let i = 0; i < 50; i++) {
+
+        animals[i] = new Animal(floor(random(cols)), floor(random(rows)));
+    }
 }
 
 function draw() {
@@ -52,7 +58,19 @@ function draw() {
                 cells[i][j].update();
             }
         }
+        for (let i = 0; i < animals.length; i++) {
+
+            animals[i].move();
+        }
     }
+    // for (let i = 0; i < animals.length; i++) {
+    //     if (animals[i].x == player.x && animals[i].y == player.y) {
+
+    //         player.addShadow(animals[i].tile);
+    //         animals[i].tile = "";
+    //     }
+    // }
+
     push();
 
     translate(width - cells.length * cellSize, height - cells[0].length * cellSize);
@@ -147,6 +165,21 @@ function mirror() {
             }
         }
     }
+}
+
+function countPlants() {
+
+    let plantCount = 0;
+
+    for (let i = 0; i < cells.length; i++) {
+        for (let j = 0; j < cells[i].length; j++) {
+
+            if (cells[i][j].state) {
+                plantCount++;
+            }
+        }
+    }
+    return plantCount;
 }
 
 function plant(x, y) {

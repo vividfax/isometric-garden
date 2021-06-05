@@ -22,9 +22,25 @@ class Cell {
         if (this.x == player.x && this.y == player.y) {
 
             player.display();
-            return;
         }
+        let animalCount = countPlants() / 20;
 
+        if (animalCount > animals.length) {
+            animalCount = animals.length;
+        }
+        // animalCount -= player.shadows.length;
+
+        for (let i = 0; i < animalCount; i++) {
+            if (this.x == animals[i].x && this.y == animals[i].y) {
+
+                animals[i].display();
+            }
+        }
+        // for (let i = 0; i < player.shadows.length; i++) {
+        //     if (this.x == player.xFootsteps[i+1] && this.y == player.yFootsteps[i+1]) {
+        //     player.displayShadow(i);
+        //     }
+        // }
     }
 
     update() {
