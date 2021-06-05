@@ -4,6 +4,7 @@ class Player {
 
         this.x = x;
         this.y = y;
+        this.tile = person6;
         this.xFootsteps = [];
         this.yFootsteps = [];
         this.shadows = [];
@@ -12,7 +13,7 @@ class Player {
     display() {
 
         imageMode(CENTER);
-        image(person6, this.x * cellSize, this.y * cellSize - 65, 382/3, 805/3);
+        image(this.tile, this.x * cellSize, this.y * cellSize - 65, 382/3, 805/3);
     }
 
     move(key) {
@@ -20,18 +21,22 @@ class Player {
         let movement = false;
 
         if (key == UP_ARROW || key == 87) {
+            plant(player.x, player.y);
             this.y -= 1;
             movement = true;
 
         } else if (key == DOWN_ARROW || key == 83) {
+            plant(player.x, player.y);
             this.y += 1;
             movement = true;
 
         } else if (key == LEFT_ARROW || key == 65) {
+            plant(player.x, player.y);
             this.x -= 1;
             movement = true;
 
         } else if (key == RIGHT_ARROW || key == 68) {
+            plant(player.x, player.y);
             this.x += 1;
             movement = true;
         }

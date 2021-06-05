@@ -9,6 +9,10 @@ let animals = [];
 
 let cellSize = 30;
 
+let animalCount = 0;
+
+let hint = "";
+
 function setup() {
 
     createCanvas(windowWidth, windowHeight);
@@ -50,7 +54,7 @@ function draw() {
 
     updatePixels();
 
-    if (frameCount % (24 * 1) == 1) {
+    if (frameCount % (floor(24 * 0.5)) == 1) {
         mirror();
         live();
         for (let i = 0; i < cells.length; i++) {
@@ -63,14 +67,17 @@ function draw() {
             animals[i].move();
         }
     }
-    // for (let i = 0; i < animals.length; i++) {
-    //     if (animals[i].x == player.x && animals[i].y == player.y) {
+    for (let i = 0; i < animalCount; i++) {
+        if (animals[i].x == player.x && animals[i].y == player.y) {
 
-    //         player.addShadow(animals[i].tile);
-    //         animals[i].tile = "";
-    //     }
-    // }
-
+            if (player.tile == person6) {
+                hint = "press spacebar to switch creature";
+            }
+            if (keyIsDown(32)) {
+                player.tile = animals[i].tile;
+            }
+        }
+    }
     push();
 
     translate(width - cells.length * cellSize, height - cells[0].length * cellSize);
@@ -87,11 +94,14 @@ function draw() {
     rect(0, 0, width, height);
 
     filter(POSTERIZE, 40);
+
+    displayHint();
+    hint = "";
+
 }
 
 function keyPressed() {
 
-    plant(player.x, player.y);
     player.move(keyCode);
 }
 
@@ -226,4 +236,18 @@ function colorLerp(a, b, ratio) {
         rb = ab + ratio * (bb - ab);
 
     return "#" + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
+}
+
+function displayHint() {
+
+    if (hint == "") {
+        return;
+    }
+    fill(0, 50);
+    rect(0, height - 100, width, height);
+    fill(colors.light);
+    textSize(20);
+    textFont("Fredericka the Great");
+    textAlign(CENTER, CENTER);
+    text(hint, width / 2, height - 50);
 }
