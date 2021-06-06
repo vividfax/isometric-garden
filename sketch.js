@@ -13,6 +13,10 @@ let animalCount = 0;
 
 let hint = "";
 
+let sine;
+let waves;
+let interacted = false;
+
 function setup() {
 
     createCanvas(windowWidth, windowHeight);
@@ -34,12 +38,17 @@ function setup() {
             cells[i][j].state = false;
         }
     }
-    player = new Player(int(cells.length / 2), int(cells[0].length / 2));
+    player = new Player(int(cells.length / 2) - 1, int(cells[0].length / 2) - 1);
 
     for (let i = 0; i < 50; i++) {
 
         animals[i] = new Animal(floor(random(cols)), floor(random(rows)));
     }
+
+    sine = new Audio("sine.ogg");
+    sine.loop = true;
+    waves = new Audio("waves.ogg");
+    waves.loop = true;
 }
 
 function draw() {
@@ -94,6 +103,12 @@ function draw() {
 
 function keyPressed() {
 
+    if (!interacted) {
+
+	    sine.play();
+        // waves.play();
+        interacted = true;
+    }
     player.move(keyCode);
 }
 

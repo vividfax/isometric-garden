@@ -1,7 +1,7 @@
 
 let person6;
-let agave1, bamboo1, bush4, cactus1, dandelion1, flower3, fruit_tree1, fungus1, palm2, pumpkin1, reed2, rose1, tomato1, tree2, tree3, tropical1, tropical2, tropical3;
-let bee1, beetle1, bird1, crow1, duck1, fox1, goose1, hedgehog1, possum1, rabbit2;
+let agave1, bamboo1, bush4, cactus1, dandelion1, flower1, flower3, fruit_tree1, fungus1, palm2, pumpkin1, reed2, rose1, tomato1, tree2, tree3, tropical1, tropical2, tropical3;
+let bee1, beetle1, bird1, crow1, deer1, duck1, fox1, goose1, hedgehog1, possum1, rabbit2;
 
 function preload() {
 
@@ -12,6 +12,7 @@ function preload() {
     bush4 = loadImage("tileset/bush4.png");
     cactus1 = loadImage("tileset/cactus1.png");
     dandelion1 = loadImage("tileset/dandelion1.png");
+    flower1 = loadImage("tileset/flower1.png");
     flower3 = loadImage("tileset/flower3.png");
     fruit_tree1 = loadImage("tileset/fruit-tree1.png");
     fungus1 =loadImage("tileset/fungus1.png");
@@ -30,6 +31,7 @@ function preload() {
     beetle1 = loadImage("tileset/beetle1.png");
     bird1 = loadImage("tileset/bird1.png");
     crow1 = loadImage("tileset/crow1.png");
+    deer1 = loadImage("tileset/deer1.png");
     duck1 = loadImage("tileset/duck1.png");
     fox1 = loadImage("tileset/fox1.png");
     goose1 = loadImage("tileset/goose1.png");

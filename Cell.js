@@ -66,7 +66,7 @@ class Cell {
 
     assignType() {
 
-        let tileset = [agave1, bamboo1, bush4, cactus1, dandelion1, flower3, fruit_tree1, fungus1, palm2, pumpkin1, reed2, rose1, tomato1, tree2, tree3, tropical1, tropical2, tropical3];
+        let tileset = [agave1, bamboo1, bush4, cactus1, dandelion1, flower1, flower3, fruit_tree1, fungus1, palm2, pumpkin1, reed2, rose1, tomato1, tree2, tree3, tropical1, tropical2, tropical3];
 
         return random(tileset);
     }

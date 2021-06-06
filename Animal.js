@@ -5,7 +5,7 @@ class Animal {
         this.x = x;
         this.y = y;
 
-        let animals = [bee1, beetle1, bird1, crow1, duck1, fox1, goose1, hedgehog1, possum1, rabbit2];
+        let animals = [bee1, beetle1, bird1, crow1, deer1, duck1, fox1, goose1, hedgehog1, possum1, rabbit2];
 
         this.tile = random(animals);
     }
