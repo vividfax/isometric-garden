@@ -8,7 +8,8 @@ class Plant {
         this.tiles = [agave1, cactus1, dandelion1, flower1, flower3, fungus1, pumpkin1, reed2, rose1, tropical2, tropical3];
 
         this.tile = "";
-        this.cached = "";
+        this.alive = false;
+        this.cached = this.alive;
     }
 
     display() {
@@ -24,6 +25,7 @@ class Plant {
 
         if (this.tile != "") {
             this.tile = "";
+            this.alive = false;
         }
     }
 
@@ -31,16 +33,17 @@ class Plant {
 
         if (this.tile == "") {
             this.tile = random(this.tiles);
+            this.alive = true;
         }
     }
 
     cache() {
 
-        this.cached = this.tile;
+        this.cached = this.alive;
     }
 
     continue() {
 
-        this.tile = this.cached;
+        this.alive = this.cached;
     }
 }

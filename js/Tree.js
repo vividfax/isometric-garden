@@ -8,7 +8,8 @@ class Tree {
         this.tiles = [bamboo1, bush4, fruit_tree1, palm2, tomato1, tree2, tree3, tropical1];
 
         this.tile = "";
-        this.cached = "";
+        this.alive = false;
+        this.cached = this.alive;
     }
 
     display() {
@@ -24,6 +25,7 @@ class Tree {
 
         if (this.tile != "") {
             this.tile = "";
+            this.alive = false;
         }
     }
 
@@ -31,16 +33,17 @@ class Tree {
 
         if (this.tile == "") {
             this.tile = random(this.tiles);
+            this.alive = true;
         }
     }
 
     cache() {
 
-        this.cached = this.tile;
+        this.cached = this.alive;
     }
 
     continue() {
 
-        this.tile = this.cached;
+        this.alive = this.cached;
     }
 }

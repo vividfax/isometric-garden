@@ -1,3 +1,6 @@
+let trashInteracted = false;
+let trashClearedCount = 0;
+
 class Trash {
 
     constructor(x, y) {
@@ -19,8 +22,13 @@ class Trash {
         }
     }
 
-    clean() {
+    clear() {
 
-        this.tile = "";
+        if (this.tile != "") {
+
+            this.tile = "";
+            trashInteracted = true;
+            trashClearedCount++;
+        }
     }
 }

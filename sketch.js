@@ -41,7 +41,7 @@ function setup() {
     }
     player = new Player(cols / 2 - 1, rows / 2 - 1);
 
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 20; i++) {
 
         animals[i] = new Animal(floor(random(cols)), floor(random(rows)));
     }
@@ -49,28 +49,28 @@ function setup() {
 
         trash[i] = new Trash(floor(random(cols)), floor(random(rows)));
     }
+    frameRate(1);
 }
 
 function draw() {
 
-    updatePixels();
-
-    if (frameCount % (floor(24 * 0.5)) == 1) {
-
-        live(trees);
-        live(plants);
-
-        trashKill();
-
-        for (let i = 0; i < animals.length; i++) {
-
-            animals[i].move();
-        }
+    if (frameCount % 2 == 0) {
+        run();
+        displayAll();
     }
-    displayAll();
+}
 
-    displayFilter();
-    displayHint();
+function run() {
+
+    live(trees);
+    live(plants);
+
+    trashKill();
+
+    for (let i = 0; i < animals.length; i++) {
+
+        animals[i].move();
+    }
 }
 
 function live(species) {
@@ -88,14 +88,13 @@ function live(species) {
 
             let neighbours = getNeighbours(species, i, j);
 
-            if (species[i][j].cached == "" && neighbours == 3) {
-                console.log('hi')
+            if (!species[i][j].cached && neighbours == 3) {
                 species[i][j].birth();
 
-            } else if (species[i][j].cached != "" && neighbours <= 1) {
+            } else if (species[i][j].cached && neighbours <= 1) {
                 species[i][j].die();
 
-            } else if (species[i][j].cached != "" && neighbours >= 4) {
+            } else if (species[i][j].cached && neighbours >= 4) {
                 species[i][j].die();
 
             } else {
@@ -147,12 +146,12 @@ function getNeighbours(species, i, j) {
             } else if (y >= rows) {
                 y = 0;
             }
-            if (species[x][y].cached != "") {
+            if (species[x][y].cached) {
                 neighbours++;
             }
         }
     }
-    if (species[i][j].cached != "") {
+    if (species[i][j].cached) {
         neighbours--;
     }
     return neighbours;
@@ -163,12 +162,113 @@ function trashKill() {
 
     for (let i = 0; i < trash.length; i++) {
 
-        plants[trash[i].x][trash[i].y].die();
-        trees[trash[i].x][trash[i].y].die();
+        if (trash[i].tile != "") {
+
+            for (let j = -1; j <= 1; j++) {
+                for (let k = -1; k <= 1; k++) {
+
+                    let x = trash[i].x + j;
+                    let y = trash[i].y + k;
+
+                    if (x < 0) {
+                        x = cols - 1;
+
+                    } else if (x >= cols) {
+                        x = 0;
+                    }
+                    if (y < 0) {
+                        y = rows - 1;
+
+                    } else if (y >= rows) {
+                        y = 0;
+                    }
+                    plants[x][y].die();
+                    trees[x][y].die();
+                }
+            }
+        }
+        // if (trash[i].tile != "") {
+
+        //     plants[trash[i].x][trash[i].y].die();
+        //     trees[trash[i].x][trash[i].y].die();
+        // }
     }
 }
 
+function switchCreature() {
+
+    for (let i = 0; i < countAnimals(); i++) {
+
+        if (animals[i].x == player.x && animals[i].y == player.y) {
+
+            if (player.isHuman()) {
+                hint = "Press ENTER to switch creature";
+            }
+            if (keyIsDown(ENTER)) {
+                player.morph(animals[i]);
+            }
+        }
+    }
+}
+
+function clearTrash() {
+
+    for (let i = 0; i < trash.length; i++) {
+
+        if (trash[i].tile != "") {
+            if (trash[i].x == player.x && trash[i].y == player.y) {
+
+                if (!trashInteracted) {
+
+                    hint = "Press DELETE to clear trash";
+                }
+                if (!player.isHuman()) {
+
+                    hint = "Only humans can clear trash. Press ESCAPE to become human again";
+                }
+                if (keyIsDown(8) && player.isHuman()) {
+                    trash[i].clear();
+                }
+            }
+        }
+    }
+}
+
+function countAnimals() {
+
+    let count = floor((countGreenery() - trash.length) / 20 - 1);
+
+    if (count > animals.length) {
+        count = animals.length;
+    }
+    return count;
+}
+
+function countGreenery() {
+
+    let count = 0;
+
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+
+            if (trees[i][j].tile != "" || plants[i][j].tile != "") {
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
 function displayAll() {
+
+    clearTrash();
+    switchCreature();
+
+    if (trashClearedCount == 4 && countGreenery() == 0) {
+
+        hint = "Hold down SPACEBAR to plant";
+    }
+    updatePixels();
 
     push();
 
@@ -189,30 +289,18 @@ function displayAll() {
                     trash[k].display();
                 }
             }
-
-            let animalCount = floor(countGreenery() / 20 - 1);
-
-            if (animalCount > animals.length) {
-                animalCount = animals.length;
-            }
-            for (let k = 0; k < animalCount; k++) {
+            for (let k = 0; k < countAnimals(); k++) {
 
                 if (animals[k].x == i && animals[k].y == j){
                     animals[k].display();
-                }
-                if (animals[k].x == player.x && animals[k].y == player.y) {
-
-                    if (player.tile == person6) {
-                        hint = "press SPACE to switch creature";
-                    }
-                    if (keyIsDown(32)) {
-                        player.morph(animals[k]);
-                    }
                 }
             }
         }
     }
     pop();
+
+    displayFilter();
+    displayHint();
 }
 
 function keyPressed() {
@@ -222,22 +310,15 @@ function keyPressed() {
 	    sine.play();
         interacted = true;
     }
-    player.move(keyCode);
-}
+    if (keyCode == ESCAPE) {
+        player.becomeHuman();
 
-function countGreenery() {
-
-    let count = 0;
-
-    for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
-
-            if (trees[i][j].tile != "" || plants[i][j].tile != "") {
-                count++;
-            }
-        }
+    } else if (keyIsDown(32)) {
+        plant(player.x, player.y);
     }
-    return count;
+    player.move(keyCode);
+
+    displayAll();
 }
 
 function plant(x, y) {

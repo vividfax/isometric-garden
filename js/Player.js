@@ -16,19 +16,15 @@ class Player {
     move(key) {
 
         if (key == UP_ARROW || key == 87) {
-            plant(player.x, player.y);
             this.y -= 1;
 
         } else if (key == DOWN_ARROW || key == 83) {
-            plant(player.x, player.y);
             this.y += 1;
 
         } else if (key == LEFT_ARROW || key == 65) {
-            plant(player.x, player.y);
             this.x -= 1;
 
         } else if (key == RIGHT_ARROW || key == 68) {
-            plant(player.x, player.y);
             this.x += 1;
         }
         if (this.x < 0) {
@@ -45,8 +41,26 @@ class Player {
         }
     }
 
+    isHuman() {
+
+        if (this.tile == person6) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     morph(creature) {
 
         this.tile = creature.tile;
+    }
+
+    becomeHuman() {
+
+        if (this.tile != person6) {
+
+            this.tile = person6;
+            trashInteracted = false;
+        }
     }
 }
