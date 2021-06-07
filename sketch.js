@@ -2,53 +2,53 @@ let colors = {
     dark: "#CAAED3",
     mid: "#D8CDDF",
     light: "#ffffff",
-}
-let cells;
+};
+let cols, rows;
+
+let trees;
+let plants;
 let player;
 let animals = [];
+let trash = [];
 
 let cellSize = 30;
 
-let animalCount = 0;
-
 let hint = "";
 
-let sine;
-let waves;
 let interacted = false;
 
 function setup() {
 
     createCanvas(windowWidth, windowHeight);
-
     createBackground();
 
-    let cols = floor(windowWidth / cellSize - 1);
-    let rows = floor(windowHeight / cellSize - 1);
+    cols = floor(windowWidth / cellSize - 1);
+    rows = floor(windowHeight / cellSize - 1);
 
     if (cols % 2 == 1) {
         cols += 1;
     }
-    cells = [...Array(cols)].map(e => Array(rows));
+    cells =[...Array(cols)].map(e => Array(rows));
+    trees = [...Array(cols)].map(e => Array(rows));
+    plants = [...Array(cols)].map(e => Array(rows));
 
-    for (let i = 0; i < cells.length; i++) {
-        for (let j = 0; j < cells[i].length; j++) {
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
 
-            cells[i][j] = new Cell(i, j, "");
-            cells[i][j].state = false;
+            trees[i][j] = new Tree(i, j);
+            plants[i][j] = new Plant(i, j);
         }
     }
-    player = new Player(int(cells.length / 2) - 1, int(cells[0].length / 2) - 1);
+    player = new Player(cols / 2 - 1, rows / 2 - 1);
 
     for (let i = 0; i < 50; i++) {
 
         animals[i] = new Animal(floor(random(cols)), floor(random(rows)));
     }
+    for (let i = 0; i < 10; i++) {
 
-    sine = new Audio("sine.ogg");
-    sine.loop = true;
-    waves = new Audio("waves.ogg");
-    waves.loop = true;
+        trash[i] = new Trash(floor(random(cols)), floor(random(rows)));
+    }
 }
 
 function draw() {
@@ -56,49 +56,163 @@ function draw() {
     updatePixels();
 
     if (frameCount % (floor(24 * 0.5)) == 1) {
-        mirror();
-        live();
-        for (let i = 0; i < cells.length; i++) {
-            for (let j = 0; j < cells[i].length; j++) {
-                cells[i][j].update();
-            }
-        }
+
+        live(trees);
+        live(plants);
+
+        trashKill();
+
         for (let i = 0; i < animals.length; i++) {
 
             animals[i].move();
         }
     }
-    for (let i = 0; i < animalCount; i++) {
-        if (animals[i].x == player.x && animals[i].y == player.y) {
+    displayAll();
 
-            if (player.tile == person6) {
-                hint = "press spacebar to switch creature";
-            }
-            if (keyIsDown(32)) {
-                player.tile = animals[i].tile;
+    displayFilter();
+    displayHint();
+}
+
+function live(species) {
+
+    mirror(species);
+
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+
+            species[i][j].cache();
+        }
+    }
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+
+            let neighbours = getNeighbours(species, i, j);
+
+            if (species[i][j].cached == "" && neighbours == 3) {
+                console.log('hi')
+                species[i][j].birth();
+
+            } else if (species[i][j].cached != "" && neighbours <= 1) {
+                species[i][j].die();
+
+            } else if (species[i][j].cached != "" && neighbours >= 4) {
+                species[i][j].die();
+
+            } else {
+                species[i][j].continue();
             }
         }
     }
+}
+
+function mirror(species) {
+
+    for (let i = 0; i < cols / 2; i++) {
+        for (let j = 0; j < rows; j++) {
+
+            if (species[i][j].tile != "") {
+                species[cols - 1 - i][j].birth();
+            }
+        }
+    }
+    for (let i = 0; i < cols / 2; i++) {
+        for (let j = 0; j < rows; j++) {
+
+            if (species[cols - 1 - i][j].tile != "") {
+                species[i][j].birth();
+            }
+        }
+    }
+}
+
+function getNeighbours(species, i, j) {
+
+    let neighbours = 0;
+
+    for (let k = -1; k <= 1; k++) {
+        for (let l = -1; l <= 1; l++) {
+
+            let x = i + k;
+            let y = j + l;
+
+            if (x < 0) {
+                x = cols - 1;
+
+            } else if (x >= cols) {
+                x = 0;
+            }
+            if (y < 0) {
+                y = rows - 1;
+
+            } else if (y >= rows) {
+                y = 0;
+            }
+            if (species[x][y].cached != "") {
+                neighbours++;
+            }
+        }
+    }
+    if (species[i][j].cached != "") {
+        neighbours--;
+    }
+    return neighbours;
+}
+
+
+function trashKill() {
+
+    for (let i = 0; i < trash.length; i++) {
+
+        plants[trash[i].x][trash[i].y].die();
+        trees[trash[i].x][trash[i].y].die();
+    }
+}
+
+function displayAll() {
+
     push();
 
     translate(width - cells.length * cellSize, height - cells[0].length * cellSize);
 
-    for (let j = 0; j < cells[0].length; j++) {
-        for (let i = 0; i < cells.length; i++) {
-            cells[i][j].display();
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+
+            trees[i][j].display();
+            plants[i][j].display();
+
+            if (player.x == i && player.y == j) {
+                player.display();
+            }
+            for (let k = 0; k < trash.length; k++) {
+
+                if (trash[k].x == i && trash[k].y == j) {
+                    trash[k].display();
+                }
+            }
+
+            let animalCount = floor(countGreenery() / 20 - 1);
+
+            if (animalCount > animals.length) {
+                animalCount = animals.length;
+            }
+            for (let k = 0; k < animalCount; k++) {
+
+                if (animals[k].x == i && animals[k].y == j){
+                    animals[k].display();
+                }
+                if (animals[k].x == player.x && animals[k].y == player.y) {
+
+                    if (player.tile == person6) {
+                        hint = "press SPACE to switch creature";
+                    }
+                    if (keyIsDown(32)) {
+                        player.morph(animals[k]);
+                    }
+                }
+            }
         }
     }
     pop();
-
-    noStroke();
-    fill(186, 149, 192, 120);
-    rect(0, 0, width, height);
-
-    filter(POSTERIZE, 40);
-
-    displayHint();
-    hint = "";
-
 }
 
 function keyPressed() {
@@ -106,104 +220,34 @@ function keyPressed() {
     if (!interacted) {
 
 	    sine.play();
-        // waves.play();
         interacted = true;
     }
     player.move(keyCode);
 }
 
-function live() {
+function countGreenery() {
 
-    for (let i = 0; i < cells.length; i++) {
-        for (let j = 0; j < cells[i].length; j++) {
+    let count = 0;
 
-            cells[i][j].cache = cells[i][j].state;
-        }
-    }
-    for (let i = 0; i < cells.length; i++) {
-        for (let j = 0; j < cells[i].length; j++) {
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
 
-            let neighbours = 0;
-
-            for (let k = -1; k <= 1; k++) {
-                for (let l = -1; l <= 1; l++) {
-
-                    let x = i + k;
-                    let y = j + l;
-
-                    if (x < 0) {
-                        x = cells.length - 1;
-
-                    } else if (x >= cells.length) {
-                        x = 0;
-                    }
-                    if (y < 0) {
-                        y = cells[i].length - 1;
-
-                    } else if (y >= cells[i].length) {
-                        y = 0;
-                    }
-                    neighbours += cells[x][y].cache;
-                }
-            }
-            neighbours -= cells[i][j].cache;
-
-            if (!cells[i][j].cache && neighbours == 3) {
-                cells[i][j].state = true;
-
-            } else if (cells[i][j].cache && neighbours <= 1) {
-                cells[i][j].state = false;
-
-            } else if (cells[i][j] && neighbours >= 4) {
-                cells[i][j].state = false;
-
-            } else {
-                cells[i][j].state = cells[i][j].cache;
+            if (trees[i][j].tile != "" || plants[i][j].tile != "") {
+                count++;
             }
         }
     }
-}
-
-function mirror() {
-
-    for (let i = 0; i < cells.length / 2; i++) {
-        for (let j = 0; j < cells[i].length; j++) {
-
-            if (cells[i][j].state) {
-                cells[cells.length - 1 - i][j].state = true;
-            }
-        }
-    }
-    for (let i = 0; i < cells.length / 2; i++) {
-        for (let j = 0; j < cells[i].length; j++) {
-
-            if (cells[cells.length - 1 - i][j].state) {
-                cells[i][j].state = true;
-            }
-        }
-    }
-}
-
-function countPlants() {
-
-    let plantCount = 0;
-
-    for (let i = 0; i < cells.length; i++) {
-        for (let j = 0; j < cells[i].length; j++) {
-
-            if (cells[i][j].state) {
-                plantCount++;
-            }
-        }
-    }
-    return plantCount;
+    return count;
 }
 
 function plant(x, y) {
 
-    cells[x][y].state = true;
-    cells[x][y].assignType();
-    cells[x][y].update();
+    if (random() > 0.5) {
+        trees[x][y].birth();
+    } else {
+        plants[x][y].birth();
+    }
+    trashKill();
 }
 
 function createBackground() {
@@ -245,6 +289,15 @@ function colorLerp(a, b, ratio) {
     return "#" + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
 }
 
+function displayFilter() {
+
+    noStroke();
+    fill(186, 149, 192, 120);
+    rect(0, 0, width, height);
+
+    filter(POSTERIZE, 40);
+}
+
 function displayHint() {
 
     if (hint == "") {
@@ -252,9 +305,12 @@ function displayHint() {
     }
     fill(0, 50);
     rect(0, height - 100, width, height);
+
     fill(colors.light);
     textSize(20);
     textFont("Fredericka the Great");
     textAlign(CENTER, CENTER);
     text(hint, width / 2, height - 50);
+
+    hint = "";
 }

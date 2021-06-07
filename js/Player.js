@@ -5,9 +5,6 @@ class Player {
         this.x = x;
         this.y = y;
         this.tile = person6;
-        this.xFootsteps = [];
-        this.yFootsteps = [];
-        this.shadows = [];
     }
 
     display() {
@@ -18,27 +15,21 @@ class Player {
 
     move(key) {
 
-        let movement = false;
-
         if (key == UP_ARROW || key == 87) {
             plant(player.x, player.y);
             this.y -= 1;
-            movement = true;
 
         } else if (key == DOWN_ARROW || key == 83) {
             plant(player.x, player.y);
             this.y += 1;
-            movement = true;
 
         } else if (key == LEFT_ARROW || key == 65) {
             plant(player.x, player.y);
             this.x -= 1;
-            movement = true;
 
         } else if (key == RIGHT_ARROW || key == 68) {
             plant(player.x, player.y);
             this.x += 1;
-            movement = true;
         }
         if (this.x < 0) {
             this.x = cells.length - 1;
@@ -52,32 +43,10 @@ class Player {
         } else if (this.y >= cells[0].length) {
             this.y = 0;
         }
-        if (movement) {
-            this.xFootsteps.unshift(this.x);
-            this.yFootsteps.unshift(this.y);
-
-            if (this.xFootsteps > animals.length + 1) {
-
-                this.xFootsteps.pop();
-                this.yFootsteps.pop();
-            }
-        }
     }
 
-    addShadow(tile) {
+    morph(creature) {
 
-        if (tile != "") {
-
-            this.shadows.push(tile);
-        }
-    }
-
-    displayShadow(i){
-
-        if (this.shadows[i] != "") {
-
-            imageMode(CENTER);
-            image(this.shadows[i], this.xFootsteps[i+1] * cellSize, this.yFootsteps[i+1] * cellSize - 65, 382/3, 805/3);
-        }
+        this.tile = creature.tile;
     }
 }
