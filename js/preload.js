@@ -8,7 +8,7 @@ let agave1, cactus1, dandelion1, flower1, flower3, fungus1, pumpkin1, reed2, ros
 
 let bee1, beetle1, bird1, crow1, deer1, duck1, fox1, goose1, hedgehog1, possum1, rabbit2;
 
-let bag1, book1, book2, card1, cinderblock1, coin1, cone2, cushion1, dice1, envelope1, gas_can1, hammer1, laundry1, mug1, pencil1, rubble1, sandal1, shoe1, teddybear1, tire1, trash1;
+let bag1, book1, book2, card1, cinderblock1, coin1, cone2, dice1, envelope1, gas_can1, laundry1, mug1, pencil1, rubble1, sandal1, shoe1, teddybear1, tire1, trash1;
 
 function preload() {
 
@@ -56,11 +56,9 @@ function preload() {
     cinderblock1 = loadImage("tileset/cinderblock1.png");
     coin1 = loadImage("tileset/coin1.png");
     cone2 = loadImage("tileset/cone2.png");
-    cushion1 = loadImage("tileset/cushion1.png");
     dice1 = loadImage("tileset/dice1.png");
     envelope1 = loadImage("tileset/envelope1.png");
     gas_can1 = loadImage("tileset/gas-can1.png");
-    hammer1 = loadImage("tileset/hammer1.png");
     laundry1 = loadImage("tileset/laundry1.png");
     mug1 = loadImage("tileset/mug1.png");
     pencil1 = loadImage("tileset/pencil1.png");

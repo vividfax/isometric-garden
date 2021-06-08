@@ -5,7 +5,7 @@ let colors = {
 };
 let cols, rows;
 
-let trees;
+// let trees;
 let plants;
 let player;
 let animals = [];
@@ -29,13 +29,13 @@ function setup() {
         cols += 1;
     }
     cells =[...Array(cols)].map(e => Array(rows));
-    trees = [...Array(cols)].map(e => Array(rows));
+    // trees = [...Array(cols)].map(e => Array(rows));
     plants = [...Array(cols)].map(e => Array(rows));
 
     for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
 
-            trees[i][j] = new Tree(i, j);
+            // trees[i][j] = new Tree(i, j);
             plants[i][j] = new Plant(i, j);
         }
     }
@@ -45,11 +45,12 @@ function setup() {
 
         animals[i] = new Animal(floor(random(cols)), floor(random(rows)));
     }
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 12; i++) {
 
         trash[i] = new Trash(floor(random(cols)), floor(random(rows)));
     }
     frameRate(1);
+    draw();
 }
 
 function draw() {
@@ -62,7 +63,7 @@ function draw() {
 
 function run() {
 
-    live(trees);
+    // live(trees);
     live(plants);
 
     trashKill();
@@ -182,8 +183,8 @@ function trashKill() {
                     } else if (y >= rows) {
                         y = 0;
                     }
+                    // trees[x][y].die();
                     plants[x][y].die();
-                    trees[x][y].die();
                 }
             }
         }
@@ -251,7 +252,7 @@ function countGreenery() {
     for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
 
-            if (trees[i][j].tile != "" || plants[i][j].tile != "") {
+            if (plants[i][j].alive) {
                 count++;
             }
         }
@@ -277,7 +278,7 @@ function displayAll() {
     for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
 
-            trees[i][j].display();
+            // trees[i][j].display();
             plants[i][j].display();
 
             if (player.x == i && player.y == j) {
@@ -323,11 +324,11 @@ function keyPressed() {
 
 function plant(x, y) {
 
-    if (random() > 0.5) {
-        trees[x][y].birth();
-    } else {
+    // if (random() > 0.5) {
+    //     trees[x][y].birth();
+    // } else {
         plants[x][y].birth();
-    }
+    // }
     trashKill();
 }
 
