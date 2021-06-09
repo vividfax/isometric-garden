@@ -15,16 +15,16 @@ class Player {
 
     move(key) {
 
-        if (key == UP_ARROW || key == 87) {
+        if (key == UP_ARROW) {
             this.y -= 1;
 
-        } else if (key == DOWN_ARROW || key == 83) {
+        } else if (key == DOWN_ARROW) {
             this.y += 1;
 
-        } else if (key == LEFT_ARROW || key == 65) {
+        } else if (key == LEFT_ARROW) {
             this.x -= 1;
 
-        } else if (key == RIGHT_ARROW || key == 68) {
+        } else if (key == RIGHT_ARROW) {
             this.x += 1;
         }
         if (this.x < 0) {

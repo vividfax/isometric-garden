@@ -17,6 +17,8 @@ let hint = "";
 
 let interacted = false;
 
+let words = [];
+
 function setup() {
 
     createCanvas(windowWidth, windowHeight);
@@ -31,12 +33,14 @@ function setup() {
     cells =[...Array(cols)].map(e => Array(rows));
     // trees = [...Array(cols)].map(e => Array(rows));
     plants = [...Array(cols)].map(e => Array(rows));
+    words = [...Array(cols)].map(e => Array(rows));
 
     for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
 
             // trees[i][j] = new Tree(i, j);
             plants[i][j] = new Plant(i, j);
+            words[i][j] = new Word("", i, j);
         }
     }
     player = new Player(cols / 2 - 1, rows / 2 - 1);
@@ -267,7 +271,7 @@ function displayAll() {
 
     if (trashClearedCount == 4 && countGreenery() == 0) {
 
-        hint = "Hold down SPACEBAR to plant";
+        hint = "Hold down SPACEBAR and walk to plant";
     }
     updatePixels();
 
@@ -275,6 +279,12 @@ function displayAll() {
 
     translate(width - cells.length * cellSize, height - cells[0].length * cellSize);
 
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+
+            words[i][j].display();
+        }
+    }
     for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
 
@@ -314,12 +324,29 @@ function keyPressed() {
     if (keyCode == ESCAPE) {
         player.becomeHuman();
 
+    } else if (keyCode == 8) {
+
+        words[player.x][player.y].words = "";
+        words[cols - 1 - player.x][player.y].words = "";
+
+        plants[player.x][player.y].die();
+        plants[cols - 1 - player.x][player.y].die();
+
     } else if (keyIsDown(32)) {
         plant(player.x, player.y);
     }
     player.move(keyCode);
 
     displayAll();
+}
+
+function keyTyped() {
+
+    if (keyCode >= 65 && keyCode <= 90 || keyCode == 32) {
+
+        words[player.x][player.y].words += key;
+        words[cols - 1 - player.x][player.y].words = key + words[cols - 1 - player.x][player.y].words;
+    }
 }
 
 function plant(x, y) {
