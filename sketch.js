@@ -29,6 +29,8 @@ function setup() {
 
     if (cols % 2 == 1) {
         cols += 1;
+    } else if (rows % 2 == 1) {
+        rows += 1;
     }
     cells =[...Array(cols)].map(e => Array(rows));
     // trees = [...Array(cols)].map(e => Array(rows));
