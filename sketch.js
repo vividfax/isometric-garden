@@ -233,7 +233,7 @@ function clearTrash() {
 
                     hint = "Only humans can clear trash. Press ESCAPE to become human again";
                 }
-                if (keyIsDown(8) && player.isHuman()) {
+                if ((keyIsDown(8) || keyIsDown(DELETE)) && player.isHuman()) {
                     trash[i].clear();
                 }
             }
@@ -326,7 +326,7 @@ function keyPressed() {
     if (keyCode == ESCAPE) {
         player.becomeHuman();
 
-    } else if (keyCode == 8) {
+    } else if (keyCode == 8 || keyCode == DELETE) {
 
         words[player.x][player.y].words = "";
         words[cols - 1 - player.x][player.y].words = "";
