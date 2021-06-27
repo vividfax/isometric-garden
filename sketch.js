@@ -211,7 +211,7 @@ function switchCreature() {
             if (player.isHuman()) {
                 hint = "Press ENTER to switch creature";
             }
-            if (keyIsDown(ENTER)) {
+            if (keyIsDown(ENTER) || keyIsDown(13)) {
                 player.morph(animals[i]);
             }
         }
@@ -233,7 +233,7 @@ function clearTrash() {
 
                     hint = "Only humans can clear trash. Press ESCAPE to become human again";
                 }
-                if ((keyIsDown(8) || keyIsDown(DELETE)) && player.isHuman()) {
+                if ((keyIsDown(8) || keyIsDown(DELETE)) || keyIsDown(46) && player.isHuman()) {
                     trash[i].clear();
                 }
             }
@@ -323,7 +323,7 @@ function keyPressed() {
 	    sine.play();
         interacted = true;
     }
-    if (keyCode == ESCAPE) {
+    if (keyCode == ESCAPE || keyIsDown(27)) {
         player.becomeHuman();
 
     } else if (keyCode == 8 || keyCode == DELETE) {
