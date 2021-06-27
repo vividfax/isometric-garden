@@ -326,7 +326,7 @@ function keyPressed() {
     if (keyCode == ESCAPE || keyIsDown(27)) {
         player.becomeHuman();
 
-    } else if (keyCode == 8 || keyCode == DELETE) {
+    } else if (keyCode == 8 || keyCode == DELETE || keyCode == 46) {
 
         words[player.x][player.y].words = "";
         words[cols - 1 - player.x][player.y].words = "";
