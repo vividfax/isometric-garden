@@ -233,7 +233,7 @@ function clearTrash() {
 
                     hint = "Only humans can clear trash. Press ESCAPE to become human again";
                 }
-                if ((keyIsDown(8) || keyIsDown(DELETE)) || keyIsDown(46) && player.isHuman()) {
+                if ((keyIsDown(8) || keyIsDown(DELETE) || keyIsDown(46)) && player.isHuman()) {
                     trash[i].clear();
                 }
             }
